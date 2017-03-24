@@ -46,7 +46,7 @@ Creates a new array concatenating array with any additional arrays and/or values
 */
 
 _.concat = function(array, ...args) {
-  const result = array.slice(), // should be deep dup
+  const result = _.deepDup(array),
         argsArr = Array.from(args);
 
   for(let el of args) {
@@ -62,11 +62,34 @@ _.concat = function(array, ...args) {
   return result;
 }
 
-var array = [1];
-var other = _.concat(array, 2, [3], [[4]]);
+// TODO: testing
+// var array = [1];
+// var other = _.concat(array, 2, [3], [[4]]);
+//
+// console.log(other);
+// // => [1, 2, 3, [4]]
+//
+// console.log(array);
+// // => [1]
 
-console.log(other);
-// => [1, 2, 3, [4]]
+_.deepDup = function(array) {
+  const result = [];
 
-console.log(array);
-// => [1]
+  for(let el of array) {
+    if(Array.isArray(el)) {
+      result.push(_.deepDup(el));
+    } else {
+      result.push(el);
+    }
+  }
+
+  return result;
+}
+
+// TODO: testing
+// var arr = [1,2,3,[4, [5]]];
+// var other = _.deepDup(arr);
+// arr[3] = 'a';
+//
+// console.log(arr[3]);
+// console.log(other[3]);
