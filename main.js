@@ -40,3 +40,33 @@ _.compact = function(array) {
 // TODO: testing
 // console.log(_.compact([0, 1, false, 2, '', 3]));
 // => [1, 2, 3]);
+
+/*
+Creates a new array concatenating array with any additional arrays and/or values.
+*/
+
+_.concat = function(array, ...args) {
+  const result = array.slice(), // should be deep dup
+        argsArr = Array.from(args);
+
+  for(let el of args) {
+    if(Array.isArray(el)) {
+      for(let subEl of el) {
+        result.push(subEl);
+      }
+    } else {
+      result.push(el);
+    }
+  }
+
+  return result;
+}
+
+var array = [1];
+var other = _.concat(array, 2, [3], [[4]]);
+
+console.log(other);
+// => [1, 2, 3, [4]]
+
+console.log(array);
+// => [1]
