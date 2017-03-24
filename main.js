@@ -211,31 +211,64 @@ _.intersection = function(array, other) {
 Converts all elements in array into a string separated by separator.
 */
 
-_.join = function(array, separator) {
+_.join = function(array, separator = '') {
+  let result = '';
 
+  for(let i = 0; i < array.length; i ++) {
+    if(i !== array.length - 1) {
+      result += (array[i].toString() + separator);
+    } else {
+      result += array[i].toString();
+    }
+  }
+
+  return result;
 }
 
-// Removes all given values from array using SameValueZero for equality comparisons.
+// TODO: testing
+// console.log(_.join([1,2,3], ', '));
 
+/*
+Removes all given values from array using SameValueZero for equality comparisons.
+*/
 _.pull = function(array, ...values) {
+  let result = [],
+      set = new Set();
 
+  for(let val of values) {
+    set.add(val);
+  }
+
+  for(let el of array) {
+    if(!set.has(el)) {
+      result.push(el);
+    }
+  }
+
+  array = result;
+  return array;
 }
-
-// var array = ['a', 'b', 'c', 'a', 'b', 'c'];
-//
-// _.pull(array, 'a', 'c');
-// console.log(array);
-// => ['b', 'b']
 
 /*
 Creates an array of unique values, in order, from all given arrays using SameValueZero for equality comparisons.
 */
 
 _.union = function(array, other) {
+  const set = new Set();
 
+  for(let el of array) {
+    set.add(el);
+  }
+
+  for(let el of other) {
+    set.add(el)
+  }
+
+  return Array.from(set);
 }
 
-// _.union([2], [1, 2]);
+// TODO: testing
+// console.log(_.union([2], [1, 2]));
 // => [2, 1]
 
 /*
@@ -243,10 +276,35 @@ Creates an array of unique values that is the symmetric difference of the given 
 */
 
 _.xor = function(array, other) {
+  const set1 = new Set(),
+        set2 = new Set(),
+        result = [];
 
+  for(let el of array) {
+    set1.add(el)
+  }
+
+  for(let el of other) {
+    set2.add(el)
+  }
+
+  set1.forEach( el => {
+    if(!set2.has(el)) {
+      result.push(el);
+    }
+  })
+
+  set2.forEach( el => {
+    if(!set1.has(el)) {
+      result.push(el);
+    }
+  })
+
+  return result
 }
 
-// _.xor([2, 1], [2, 3]);
+// TODO: testing
+// console.log(_.xor([2, 1], [2, 3]));
 // => [1, 3]
 
 /*
@@ -254,8 +312,21 @@ Creates an array of grouped elements, the first of which contains the first elem
 */
 
 _.zip = function(array, ...others) {
+  const result = [];
 
+  for(let i = 0; i < array.length; i ++) {
+    result[i] = [array[i]];
+  }
+
+  for(let sub of others) {
+    for(let i = 0; i < array.length; i ++) {
+      result[i].push(sub[i]);
+    }
+  }
+
+  return result;
 }
 
-// _.zip(['a', 'b'], [1, 2], [true, false]);
+// TODO: testing
+// console.log(_.zip(['a', 'b'], [1, 2], [true, false]));
 // => [['a', 1, true], ['b', 2, false]]
