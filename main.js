@@ -93,3 +93,32 @@ _.deepDup = function(array) {
 //
 // console.log(arr[3]);
 // console.log(other[3]);
+
+/*
+Creates an array of array values not included in the other given arrays using SameValueZero for equality comparisons.
+*/
+
+_.difference = function(array, other) {
+  const set = new Set(),
+        result = [];
+
+  for(let el of array) {
+    set.add(el);
+  }
+
+  for(let el of other) {
+    if(set.has(el)) {
+      set.delete(el);
+    }
+  }
+
+  set.forEach(el => {
+    result.push(el);
+  });
+
+  return result;
+}
+
+// TODO: testing
+// console.log(_.difference([2, 1], [2, 3]));
+// => [1]
