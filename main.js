@@ -122,3 +122,99 @@ _.difference = function(array, other) {
 // TODO: testing
 // console.log(_.difference([2, 1], [2, 3]));
 // => [1]
+
+/*
+Creates a slice of array with n elements dropped from the beginning.
+*/
+
+_.drop = function(array, n = 1) {
+  const result = [];
+
+  for(let i = n; i < array.length; i ++) {
+    result.push(array[i]);
+  }
+
+  return result;
+}
+
+// TODO: testing!
+// console.log(_.drop([1, 2, 3]));
+// => [2, 3]
+
+// console.log(_.drop([1, 2, 3], 2));
+// => [3]
+
+// console.log(_.drop([1, 2, 3], 5));
+// => []
+
+// console.log(_.drop([1, 2, 3], 0));
+// => [1, 2, 3]
+
+/*
+  Recursively flatten array up to depth times.
+*/
+
+_.flattenDepth = function(array, depth) {
+  let result = [];
+
+  if(depth === 0) {
+    return array;
+  }
+
+  for(let el of array) {
+    if(Array.isArray(el)) {
+      result = result.concat(_.flattenDepth(el, depth - 1));
+    } else {
+      result.push(el);
+    }
+  }
+
+  return result;
+}
+var array = [1, [2, [3, [4]], 5]];
+
+// console.log(_.flattenDepth(array, 1));
+// => [1, 2, [3, [4]], 5]
+
+// console.log(_.flattenDepth(array, 2));
+// => [1, 2, 3, [4], 5]
+
+/*
+Creates an array of unique values that are included in all given arrays using SameValueZero for equality comparisons. The order and references of result values are determined by the first array.
+*/
+
+// _.intersection([2, 1], [2, 3]);
+// => [2]
+
+/*
+Converts all elements in array into a string separated by separator.
+*/
+
+// Removes all given values from array using SameValueZero for equality comparisons.
+
+// var array = ['a', 'b', 'c', 'a', 'b', 'c'];
+//
+// _.pull(array, 'a', 'c');
+// console.log(array);
+// => ['b', 'b']
+
+/*
+Creates an array of unique values, in order, from all given arrays using SameValueZero for equality comparisons.
+*/
+
+// _.union([2], [1, 2]);
+// => [2, 1]
+
+/*
+Creates an array of unique values that is the symmetric difference of the given arrays. The order of result values is determined by the order they occur in the arrays.
+*/
+
+// _.xor([2, 1], [2, 3]);
+// => [1, 3]
+
+/*
+Creates an array of grouped elements, the first of which contains the first elements of the given arrays, the second of which contains the second elements of the given arrays, and so on.
+*/
+
+// _.zip(['a', 'b'], [1, 2], [true, false]);
+// => [['a', 1, true], ['b', 2, false]]
