@@ -14,13 +14,6 @@ _.chunk = function(array, n) {
   return result;
 }
 
-// TODO: testing
-// console.log(_.chunk(['a', 'b', 'c', 'd'], 2));
-// => [['a', 'b'], ['c', 'd']]
-
-// console.log(_.chunk(['a', 'b', 'c', 'd'], 3));
-// => [['a', 'b', 'c'], ['d']]
-
 /*
 Creates an array with all falsey values removed. The values false, null, 0, "", undefined, and NaN are falsey.
 */
@@ -36,10 +29,6 @@ _.compact = function(array) {
 
   return result;
 }
-
-// TODO: testing
-// console.log(_.compact([0, 1, false, 2, '', 3]));
-// => [1, 2, 3]);
 
 /*
 Creates a new array concatenating array with any additional arrays and/or values.
@@ -62,16 +51,6 @@ _.concat = function(array, ...args) {
   return result;
 }
 
-// TODO: testing
-// var array = [1];
-// var other = _.concat(array, 2, [3], [[4]]);
-//
-// console.log(other);
-// // => [1, 2, 3, [4]]
-//
-// console.log(array);
-// // => [1]
-
 _.deepDup = function(array) {
   const result = [];
 
@@ -85,14 +64,6 @@ _.deepDup = function(array) {
 
   return result;
 }
-
-// TODO: testing
-// var arr = [1,2,3,[4, [5]]];
-// var other = _.deepDup(arr);
-// arr[3] = 'a';
-//
-// console.log(arr[3]);
-// console.log(other[3]);
 
 /*
 Creates an array of array values not included in the other given arrays using SameValueZero for equality comparisons.
@@ -119,10 +90,6 @@ _.difference = function(array, other) {
   return result;
 }
 
-// TODO: testing
-// console.log(_.difference([2, 1], [2, 3]));
-// => [1]
-
 /*
 Creates a slice of array with n elements dropped from the beginning.
 */
@@ -136,19 +103,6 @@ _.drop = function(array, n = 1) {
 
   return result;
 }
-
-// TODO: testing!
-// console.log(_.drop([1, 2, 3]));
-// => [2, 3]
-
-// console.log(_.drop([1, 2, 3], 2));
-// => [3]
-
-// console.log(_.drop([1, 2, 3], 5));
-// => []
-
-// console.log(_.drop([1, 2, 3], 0));
-// => [1, 2, 3]
 
 /*
   Recursively flatten array up to depth times.
@@ -172,15 +126,6 @@ _.flattenDepth = function(array, depth) {
   return result;
 }
 
-
-// TODO: testing
-// var array = [1, [2, [3, [4]], 5]];
-// console.log(_.flattenDepth(array, 1));
-// => [1, 2, [3, [4]], 5]
-
-// console.log(_.flattenDepth(array, 2));
-// => [1, 2, 3, [4], 5]
-
 /*
 Creates an array of unique values that are included in all given arrays using SameValueZero for equality comparisons.
 The order and references of result values are determined by the first array.
@@ -203,10 +148,6 @@ _.intersection = function(array, other) {
   return result;
 }
 
-// TODO: testing
-// console.log(_.intersection([2, 1], [2, 3]));
-// => [2]
-
 /*
 Converts all elements in array into a string separated by separator.
 */
@@ -224,9 +165,6 @@ _.join = function(array, separator = '') {
 
   return result;
 }
-
-// TODO: testing
-// console.log(_.join([1,2,3], ', '));
 
 /*
 Removes all given values from array using SameValueZero for equality comparisons.
@@ -267,10 +205,6 @@ _.union = function(array, other) {
   return Array.from(set);
 }
 
-// TODO: testing
-// console.log(_.union([2], [1, 2]));
-// => [2, 1]
-
 /*
 Creates an array of unique values that is the symmetric difference of the given arrays. The order of result values is determined by the order they occur in the arrays.
 */
@@ -303,10 +237,6 @@ _.xor = function(array, other) {
   return result
 }
 
-// TODO: testing
-// console.log(_.xor([2, 1], [2, 3]));
-// => [1, 3]
-
 /*
 Creates an array of grouped elements, the first of which contains the first elements of the given arrays, the second of which contains the second elements of the given arrays, and so on.
 */
@@ -327,6 +257,74 @@ _.zip = function(array, ...others) {
   return result;
 }
 
-// TODO: testing
-// console.log(_.zip(['a', 'b'], [1, 2], [true, false]));
-// => [['a', 1, true], ['b', 2, false]]
+/*
+  The opposite of _.before; this method creates a function that invokes func once it's called n or more times.
+*/
+
+_.after = function(n, func) {
+  const f = () => {
+    n --;
+    if(n === 0) {
+      func();
+    } else {
+      return f;
+    }
+  }
+
+  return f;
+}
+
+/*
+  Creates a function that invokes func with the this binding of thisArg and partials prepended to the arguments it receives.
+*/
+
+_.bind = function(func, thisArg, ...partials) {
+  return (...args) => func.apply(thisArg,
+                                 Array.from(partials).concat(Array.from(args))
+                               )
+}
+
+/*
+  Creates a function that accepts arguments of func and either invokes func returning its result,
+  if at least arity number of arguments have been provided,
+  or returns a function that accepts the remaining func arguments, and so on.
+  The arity of func may be specified if func.length is not sufficient.
+*/
+_.curry = function(func, arity, ...args) {
+  totalArgs = args;
+  const f = (...newArgs) => {
+    totalArgs = totalArgs.concat(newArgs);
+    if(totalArgs.length >= arity) {
+      return func(totalArgs);
+    } else {
+      return f;
+    }
+  }
+
+  return f;
+}
+
+/*
+Creates a throttled function that only invokes func at most once per every wait milliseconds.
+The throttled function comes with a cancel method to cancel delayed func invocations and a flush method to immediately invoke them. Provide options to indicate whether func should be invoked on the leading and/or trailing edge of the wait timeout. The func is invoked with the last arguments provided to the throttled function. Subsequent calls to the throttled function return the result of the last func invocation.
+*/
+
+_.throttle = function(func, wait) {
+  let lastResult = null,
+      legit = false,
+      counter = 0;
+
+  return () => {
+    if(!legit) {
+      lastResult = func();
+      legit = true
+      window.setTimeout(() => {
+        legit = false;
+      }, wait);
+    } else {
+      return lastResult;
+    }
+  }
+
+  return lastResult;
+}
